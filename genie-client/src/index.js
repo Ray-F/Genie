@@ -1,9 +1,12 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
+import GenieApp from './containers/GenieApp';
+
+
 
 ReactDOM.render(
   <React.StrictMode>
-    <h2>Genie Client Frontend</h2>
+    <GenieApp />
   </React.StrictMode>,
   document.getElementById('root')
 );
