@@ -12,6 +12,7 @@
   "license": "MIT",
   "private": false,
   "scripts": {
+    "start": "yarn run dev",
     "dev": "concurrently \"cd genie-client && yarn run start\" \"cd genie-server && yarn run start\"",
     "init": "concurrently \"cd genie-client && yarn install\" \"cd genie-server && yarn install\""
   },
