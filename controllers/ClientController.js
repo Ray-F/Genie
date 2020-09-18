@@ -61,9 +61,56 @@ const getClients = async (req, res, next) => {
 }
 
 const getCurrentClients = async (req, res, next) => {
-  const status = {
+  const status = [
+    {
+      name: "Taylor Smith",
+      isTyping: true,
+      chat: [
+        {
+          sender: 'genie',
+          time: '10:11 PM',
+          content: 'Hey there! How may we help you here at Josh Fowlers Photography?'
+        },
+        {
+          sender: 'client',
+          time: '10:13 PM',
+          content: 'Hey there, my name is Taylor and I’m looking for a wedding photographer for my mate’s wedding'
+        },
+        {
+          sender: 'client',
+          time: '10:13 PM',
+          content: 'It’s going to be out in Te Puke, and I’m hoping to find about 7 hours of coverage (just for the ceremony and until the first dance)'
+        },
+        {
+          sender: 'genie',
+          time: '10:14 PM',
+          content: 'Great! We can help with that. When is your mate’s wedding date?'
+        },
+        {
+          sender: 'client',
+          time: '10:15 PM',
+          content: 'Oh yup, it’s going to be on the 21st June next year.'
+        }
+      ]
+    },
+    {
+      name: "Bob Stone",
+      isTyping: true,
+      chat: [
+        {
+          sender: 'genie',
+          time: '10:14 PM',
+          content: 'Great! We can help with that. When is your mate’s wedding date?'
+        },
+        {
+          sender: 'client',
+          time: '10:15 PM',
+          content: 'Oh yup, it’s going to be on the 21st June next year.'
+        }
+      ]
+    },
 
-  };
+  ];
 
   res.json(status);
 }
