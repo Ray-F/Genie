@@ -1,3 +1,5 @@
+const mongoClient = require('../models/mongoConnection');
+
 const getClients = async (req, res, next) => {
   const clients = [
     {
