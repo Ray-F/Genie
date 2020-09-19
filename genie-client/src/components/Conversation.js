@@ -19,6 +19,7 @@ const useStyles = makeStyles((theme) => ({
   },
 
   chatAccordion: {
+    width: '100%',
     padding: theme.spacing(1),
     marginTop: '0 !important',
     marginBottom: `32px !important`,
@@ -63,16 +64,15 @@ export default function Conversation(props) {
   useEffect(() => {
     if (props.client.isTyping) {
       setClientChat([...props.client.chat, {sender: 'client', content: '...', time: Date()}]);
+    } else {
+      setClientChat(props.client.chat);
     }
-  }, []);
-
+  }, [props]);
 
 
   return (
     <Accordion className={`${classes.sideCard} ${classes.chatAccordion}`}>
-      <AccordionSummary
-        expandIcon={<ExpandMoreIcon />}
-      >
+      <AccordionSummary expandIcon={<ExpandMoreIcon />}>
         <Box>
           <Typography variant='h5'>Current Conversation</Typography>
           <Typography variant='body2'>with {props.client.name}</Typography>

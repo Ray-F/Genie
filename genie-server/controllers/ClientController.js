@@ -94,6 +94,22 @@ const getCurrentClients = async (req, res, next) => {
       ]
     },
     {
+      name: "Charlie Chap",
+      isTyping: false,
+      chat: [
+        {
+          sender: 'genie',
+          time: '10:20 PM',
+          content: 'How may we help today?'
+        },
+        {
+          sender: 'client',
+          time: '10:20 PM',
+          content: 'Dont know, you tell me'
+        }
+      ]
+    },
+    {
       name: "Bob Stone",
       isTyping: true,
       chat: [
@@ -106,10 +122,14 @@ const getCurrentClients = async (req, res, next) => {
           sender: 'client',
           time: '10:15 PM',
           content: 'Oh yup, it’s going to be on the 21st June next year.'
+        },
+        {
+          sender: 'client',
+          time: '10:16 PM',
+          content: 'I don\'t know if thats going to work for me? Maybe some other time?'
         }
       ]
     },
-
   ];
 
   res.json(status);

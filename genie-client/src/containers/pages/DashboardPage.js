@@ -99,11 +99,20 @@ export default function DashboardPage() {
   const [currentStatus, setCurrentStatus] = useState([]);
 
   useEffect(() => {
-    fetch('/api/clients/current').then(async (res) => {
-      let resObj = await res.json();
+    const fetchCurrent = async () => {
+      fetch('/api/clients/current').then(async (res) => {
+        let resObj = await res.json();
 
-      setCurrentStatus(resObj);
-    })
+        setCurrentStatus(resObj);
+      });
+    };
+
+    fetchCurrent();
+
+    const interval = setInterval(fetchCurrent, 3000);
+
+    return () => clearInterval(interval);
+
   }, []);
 
   useEffect(() => {
@@ -113,20 +122,6 @@ export default function DashboardPage() {
       setClientItems(resObj);
     });
   }, []);
-
-  let currentClient = {};
-  if (currentStatus[0]) {
-    currentClient.name = currentStatus[0].name;
-    currentClient.chat = [...currentStatus[0].chat];
-
-    if (currentStatus[0].isTyping) {
-      currentClient.chat.push({sender: 'client', content: '...', time: Date()});
-    }
-  } else {
-    currentClient.name = '';
-    currentClient.chat = [];
-    currentClient.isTyping = false;
-  }
 
   return (
     <Box className={classes.container}>
