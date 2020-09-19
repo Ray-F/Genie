@@ -105,3 +105,7 @@ dist
 
 # Environment variables
 .env.*
+
+# Remote server autogit
+pull.php
+pull.sh
