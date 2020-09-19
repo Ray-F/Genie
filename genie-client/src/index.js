@@ -5,8 +5,6 @@ import GenieApp from './containers/GenieApp';
 
 
 ReactDOM.render(
-  <React.StrictMode>
-    <GenieApp />
-  </React.StrictMode>,
+  <GenieApp />,
   document.getElementById('root')
 );

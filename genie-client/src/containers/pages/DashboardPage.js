@@ -3,15 +3,25 @@ import React, { useState, useEffect } from 'react';
 import {
   Paper, Grid, Box, Container,
   Typography, makeStyles, AppBar, Toolbar,
-  IconButton, MenuItem
+  IconButton, MenuItem, Accordion, AccordionSummary, AccordionDetails,
+  List
 } from '@material-ui/core';
 
-import AccountCircle from '@material-ui/icons/AccountCircle';
 
+import Conversation from '../../components/Conversation';
+import ClientCard from '../../components/ClientCard';
+
+
+import AccountCircle from '@material-ui/icons/AccountCircle';
+import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
+import SettingsIcon from '@material-ui/icons/Settings';
+import TimelineIcon from '@material-ui/icons/Timeline';
+import AutorenewIcon from '@material-ui/icons/Autorenew';
 
 const useStyles = makeStyles((theme) => ({
   container: {
     backgroundColor: '#EBEBEB',
+    paddingBottom: theme.spacing(4)
   },
 
   nav: {
@@ -50,41 +60,21 @@ const useStyles = makeStyles((theme) => ({
     color: '#00C2B0'
   },
 
+  optionsBar: {
+    borderRadius: theme.spacing(1),
+    backgroundColor: '#00C2B0',
+    color: 'white',
+    margin: theme.spacing(2),
+    paddingLeft: theme.spacing(2),
+    paddingRight: theme.spacing(2)
+  },
+
+  optionsIcons: {
+    textAlign: 'right'
+  },
+
   gridContainer: {
     paddingTop: theme.spacing(13)
-  },
-
-  sideCard: {
-    padding: theme.spacing(3),
-    backgroundColor: 'white',
-    boxShadow: '0 2px 3px rgba(0, 0, 0, 0.3)',
-    borderRadius: '5px',
-    marginBottom: theme.spacing(4)
-  },
-
-  chatSender: {
-    fontSize: '0.8em'
-  },
-
-  chatContent: {
-
-  },
-
-  chatMe: {
-    textAlign: 'right',
-    backgroundColor: '#04BF7C',
-    color: 'white'
-  },
-
-  chatClient: {
-    backgroundColor: '#F5F5F5'
-  },
-
-  chatContainer: {
-    marginTop: theme.spacing(2),
-    marginBottom: theme.spacing(2),
-    padding: theme.spacing(2),
-    borderRadius: '15px',
   },
 
   clientContainer: {
@@ -92,35 +82,12 @@ const useStyles = makeStyles((theme) => ({
     position: 'relative',
   },
 
-  clientCard: {
+  sideCard: {
     padding: theme.spacing(3),
     backgroundColor: 'white',
-    minHeight: '450px',
     boxShadow: '0 2px 3px rgba(0, 0, 0, 0.3)',
     borderRadius: '5px',
-  },
-
-  clientCardTitles: {
-    marginTop: theme.spacing(3),
-    color: '#555',
-    fontSize: '0.8em',
-    fontWeight: '700'
-  },
-
-  clientName: {
-    color: '#2373BD',
-    textTransform: 'uppercase',
-    fontSize: '1.3em'
-  },
-
-  clientQuoteTitle: {
-    marginTop: theme.spacing(10),
-    textTransform: 'uppercase',
-    fontWeight: '500'
-  },
-
-  clientQuote: {
-    color: '#2373BD'
+    marginBottom: theme.spacing(4),
   }
 }));
 
@@ -186,33 +153,43 @@ export default function DashboardPage() {
       </AppBar>
 
       <Container maxWidth={'lg'} className={classes.gridContainer}>
+
+        <Box className={classes.optionsBar}>
+          <Grid container alignItems='center'>
+            <Grid item xs={4}>
+              <Typography variant='h6'>Options</Typography>
+            </Grid>
+            <Grid item xs={8} className={classes.optionsIcons}>
+              <IconButton color='inherit'>
+                <TimelineIcon color='inherit' />
+              </IconButton>
+              <IconButton color='inherit'>
+                <AutorenewIcon color='inherit' />
+              </IconButton>
+              <IconButton color='inherit'>
+                <SettingsIcon color='inherit' />
+              </IconButton>
+
+            </Grid>
+          </Grid>
+
+        </Box>
+
+
+
         <Grid container>
           <Grid item xs={false} sm={5} md={4}>
             <Grid container className={classes.clientContainer}>
               <Grid item xs={12} className={classes.sideCard}>
-                <Typography variant='h5'>{currentStatus.length} Active Conversation{currentStatus.length == 1 ? '' : 's'}</Typography>
+                <Typography variant='h5' display='inline'>{currentStatus.length} </Typography>
+                <Typography variant='body2' display='inline'>Active Conversation{currentStatus.length == 1 ? '' : 's'}</Typography>
               </Grid>
-              <Grid item xs={12} className={classes.sideCard}>
-                <Typography variant='h5'>Current Conversation</Typography>
-                <Typography variant='body2'>with {currentClient.name}</Typography>
 
-                {currentClient.chat.map((chatMessage, index) => {
-                  let sender = (chatMessage.sender == "client") ? currentClient.name : "Genie";
-
-                  let toClass = (chatMessage.sender == "client") ? classes.chatClient : classes.chatMe;
-
-                  return (
-                    <Paper key={index} className={`${classes.chatContainer} ${toClass}`} elevation={0}>
-                      <Typography variant="h6" className={classes.chatSender}>
-                        {sender}
-                      </Typography>
-                      <Typography variant='body2' className={classes.chatContent}>
-                        {chatMessage.content}
-                      </Typography>
-                    </Paper>
-                  )
-                })}
-              </Grid>
+              {currentStatus.map((client, index) => {
+                return (
+                  <Conversation client={client} key={index} />
+                );
+              })}
             </Grid>
           </Grid>
           <Grid item xs={12} sm={7} md={8}>
@@ -220,51 +197,7 @@ export default function DashboardPage() {
               {clientItems.map((item, index) => {
                 return (
                   <Grid item xs={12} md={6} key={index} className={classes.clientContainer}>
-                    <Box className={classes.clientCard}>
-                      <Typography className={classes.clientName}>
-                        {item.name}
-                      </Typography>
-
-                      <Typography className={classes.clientCardTitles}>
-                        Looking for...
-                      </Typography>
-
-                      <Typography>
-                        {item.desc}
-                      </Typography>
-
-                      <Typography className={classes.clientCardTitles}>
-                        Date/Location:
-                      </Typography>
-
-                      <Typography>
-                        {item.date}, {item.location}
-                      </Typography>
-
-                      <Typography className={classes.clientCardTitles}>
-                        Keywords:
-                      </Typography>
-
-                      <Typography>
-                        {item.terms}
-                      </Typography>
-
-                      <Typography className={classes.clientCardTitles}>
-                        Budget Estimate:
-                      </Typography>
-
-                      <Typography>
-                        ${item.budgetEstimate[0]} - ${item.budgetEstimate[1]}
-                      </Typography>
-
-                      <Typography className={`${classes.clientCardTitles} ${classes.clientQuoteTitle}`}>
-                        Quoted Amount:
-                      </Typography>
-
-                      <Typography className={classes.clientQuote}>
-                        ${item.quoted}
-                      </Typography>
-                    </Box>
+                    <ClientCard item={item} />
                   </Grid>
                 );
               })}
