@@ -4,10 +4,15 @@ const clientController = require('../controllers/ClientController');
 
 const router = Router();
 
+const inputRouter = require('./inputRouter');
+
+
 
 router.get("/api/clients", clientController.getClients);
 
 router.get("/api/clients/current", clientController.getCurrentClients);
+
+router.use("/api/inputs", inputRouter);
 
 router.use("/", (req, res, next) => {
   res.send(`
