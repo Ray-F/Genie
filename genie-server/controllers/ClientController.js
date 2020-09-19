@@ -1,7 +1,7 @@
 const getClients = async (req, res, next) => {
   const clients = [
     {
-      name: "Apia Tuhoe",
+      name: "Josh Tuhoe",
 
       desc: "Wedding Photography",
       date: "21st of June, 2021",
