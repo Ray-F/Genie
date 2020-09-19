@@ -74,7 +74,7 @@ export default function Conversation(props) {
     <Accordion className={`${classes.sideCard} ${classes.chatAccordion}`}>
       <AccordionSummary expandIcon={<ExpandMoreIcon />}>
         <Box>
-          <Typography variant='h5'>Current Conversation</Typography>
+          <Typography variant='h5'>Recent Conversation</Typography>
           <Typography variant='body2'>with {props.client.name}</Typography>
         </Box>
       </AccordionSummary>

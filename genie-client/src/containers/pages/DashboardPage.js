@@ -3,8 +3,8 @@ import React, { useState, useEffect } from 'react';
 import {
   Paper, Grid, Box, Container,
   Typography, makeStyles, AppBar, Toolbar,
-  IconButton, MenuItem, Accordion, AccordionSummary, AccordionDetails,
-  List
+  IconButton, MenuItem, Tooltip,
+  Accordion, AccordionSummary, AccordionDetails,
 } from '@material-ui/core';
 
 
@@ -20,6 +20,7 @@ import AutorenewIcon from '@material-ui/icons/Autorenew';
 
 const useStyles = makeStyles((theme) => ({
   container: {
+    minHeight: '100vh',
     backgroundColor: '#EBEBEB',
     paddingBottom: theme.spacing(4)
   },
@@ -97,8 +98,10 @@ export default function DashboardPage() {
 
   const [clientItems, setClientItems] = useState([]);
   const [currentStatus, setCurrentStatus] = useState([]);
+  const [refresh, setRefresh] = useState(0);
 
   useEffect(() => {
+    setCurrentStatus([]);
     const fetchCurrent = async () => {
       fetch('/api/clients/current').then(async (res) => {
         let resObj = await res.json();
@@ -113,15 +116,16 @@ export default function DashboardPage() {
 
     return () => clearInterval(interval);
 
-  }, []);
+  }, [refresh]);
 
   useEffect(() => {
+    setClientItems([]);
     fetch('/api/clients').then(async (res) => {
       let resObj = await res.json();
 
       setClientItems(resObj);
     });
-  }, []);
+  }, [refresh]);
 
   return (
     <Box className={classes.container}>
@@ -155,16 +159,22 @@ export default function DashboardPage() {
               <Typography variant='h6'>Options</Typography>
             </Grid>
             <Grid item xs={8} className={classes.optionsIcons}>
-              <IconButton color='inherit'>
-                <TimelineIcon color='inherit' />
-              </IconButton>
-              <IconButton color='inherit'>
-                <AutorenewIcon color='inherit' />
-              </IconButton>
-              <IconButton color='inherit'>
-                <SettingsIcon color='inherit' />
-              </IconButton>
+              <Tooltip title="Analytics">
+                <IconButton color='inherit'>
+                  <TimelineIcon color='inherit' />
+                </IconButton>
+              </Tooltip>
+              <Tooltip title="Refresh">
+                <IconButton color='inherit' onClick={() => setRefresh(!refresh)}>
+                  <AutorenewIcon color='inherit' />
+                </IconButton>
+              </Tooltip>
 
+              <Tooltip title="Settings">
+                <IconButton color='inherit'>
+                  <SettingsIcon color='inherit' />
+                </IconButton>
+              </Tooltip>
             </Grid>
           </Grid>
 
@@ -177,7 +187,7 @@ export default function DashboardPage() {
             <Grid container className={classes.clientContainer}>
               <Grid item xs={12} className={classes.sideCard}>
                 <Typography variant='h5' display='inline'>{currentStatus.length} </Typography>
-                <Typography variant='body2' display='inline'>Active Conversation{currentStatus.length == 1 ? '' : 's'}</Typography>
+                <Typography variant='body2' display='inline'>Recent Conversation{currentStatus.length == 1 ? '' : 's'}</Typography>
               </Grid>
 
               {currentStatus.map((client, index) => {
