@@ -5,7 +5,7 @@ const inputController = require('../controllers/InputController');
 const router = Router();
 
 
-router.all('/', inputController.saveChatbotInput);
+router.get('/instabot', inputController.saveChatbotInput);
 
 
 
