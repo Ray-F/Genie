@@ -1,7 +1,9 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 
 import {
-  Paper, Grid, Box, Container, Typography, makeStyles, AppBar, Toolbar, IconButton, Link
+  Paper, Grid, Box, Container,
+  Typography, makeStyles, AppBar,
+  Toolbar, IconButton, Link
 } from '@material-ui/core';
 
 import ArrowBackIcon from "@material-ui/icons/ArrowBack";
@@ -37,7 +39,26 @@ const useStyles = makeStyles((theme) => ({
 
 export default function ClientChatPage() {
   const classes = useStyles();
-  
+
+  useEffect(() => {
+    const script = document.createElement("script");
+    script.type = 'text/javascript';
+    script.src = "https://widget.instabot.io/jsapi/rokoInstabot.js";
+    script.crossorigin = true;
+    script.innerHTML = 'apiKey: "iNaFp81BQM6TBmzFj0pYR9kFP3JjQiayjSEsIjIoedk="';
+
+    script.onload = () => {
+      console.log(window.RokoInstabot);
+      window.RokoInstabot.trigger();
+    }
+
+    document.head.appendChild(script);
+
+    return () => {
+      document.head.removeChild(script);
+    }
+  }, []);
+
   return (
     <div className={classes.root}>
       <AppBar position="static" color="default">
