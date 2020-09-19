@@ -69,20 +69,16 @@ export default function IndexPage() {
 
         <Grid container justify='center' align='center' className={classes.selectionContainer}>
           <Grid item xs={6}>
-            <Link to='/client'>
-              <IconButton>
+              <IconButton onClick={() => {setTimeout(() => (window.location = '/client'), 500)}}>
                 <PersonIcon className={classes.selectionIcon} />
               </IconButton>
-            </Link>
             <Typography className={classes.selectionText}>Client Simulator</Typography>
           </Grid>
 
           <Grid item xs={6}>
-            <Link to='/dashboard'>
-            <IconButton>
+            <IconButton onClick={() => {setTimeout(() => (window.location = '/dashboard'), 500)}}>
               <DashboardIcon className={classes.selectionIcon} />
             </IconButton>
-            </Link>
             <Typography className={classes.selectionText}>Dashboard</Typography>
           </Grid>
         </Grid>
