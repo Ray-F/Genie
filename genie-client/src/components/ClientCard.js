@@ -5,21 +5,24 @@ import {
   Typography, makeStyles, AppBar, Toolbar, IconButton, Tooltip, Menu
 } from '@material-ui/core';
 
-import DeleteIcon from "@material-ui/icons/Delete";
 import CheckIcon from "@material-ui/icons/Check";
 import MoreVertIcon from "@material-ui/icons/MoreVert";
 import ArchiveIcon from "@material-ui/icons/Archive";
-import ReplyIcon from "@material-ui/icons/Reply";
+import ClearIcon from "@material-ui/icons/Clear";
 import ConversationIcon from "@material-ui/icons/Forum";
 
 const useStyles = makeStyles((theme) => ({
   clientCard: {
-    position: 'relative',
+    position: "relative",
     padding: theme.spacing(3),
     backgroundColor: "white",
     minHeight: "450px",
     boxShadow: "0 2px 3px rgba(0, 0, 0, 0.3)",
     borderRadius: "5px",
+  },
+
+  clientCardTopLine: {
+
   },
 
   clientCardTitles: {
@@ -33,6 +36,14 @@ const useStyles = makeStyles((theme) => ({
     color: "#2373BD",
     textTransform: "uppercase",
     fontSize: "1.3em",
+    display: "inline-block",
+  },
+
+  clientStatus: {
+    display: "inline-block",
+    textTransform: "uppercase",
+    float: "right",
+    fontWeight: 420,
   },
 
   clientQuoteTitle: {
@@ -46,18 +57,16 @@ const useStyles = makeStyles((theme) => ({
   },
 
   bottomRow: {
-    position: 'absolute',
-    bottom: '20px',
-    width: '100%',
+    position: "absolute",
+    bottom: "20px",
+    width: "100%",
   },
 
   optionsContainer: {
-    position: 'absolute',
-    bottom: '-10px',
-    right: '30px'
-  }
-
-
+    position: "absolute",
+    bottom: "-10px",
+    right: "30px",
+  },
 }));
 
 export default function ClientCard(props) {
@@ -89,9 +98,15 @@ export default function ClientCard(props) {
   return (
     <React.Fragment>
       <Box className={classes.clientCard}>
-        <Typography className={classes.clientName}>
-          {props.item.name}
-        </Typography>
+        <Box className={classes.clientCardTopLine}>
+          <Typography className={classes.clientName}>
+            {props.item.name}
+          </Typography>
+
+          <Typography className={classes.clientStatus}>
+            {props.item.status}
+          </Typography>
+        </Box>
 
         <Typography className={classes.clientCardTitles}>
           Looking for...
@@ -119,8 +134,6 @@ export default function ClientCard(props) {
           ${props.item.budgetEstimate[0]} - ${props.item.budgetEstimate[1]}
         </Typography>
 
-
-
         <Box className={classes.bottomRow}>
           <Box>
             <Typography
@@ -141,9 +154,9 @@ export default function ClientCard(props) {
               </IconButton>
             </Tooltip>
 
-            <Tooltip title="Delete">
+            <Tooltip title="Decline">
               <IconButton onClick={handleDelete}>
-                <DeleteIcon />
+                <ClearIcon />
               </IconButton>
             </Tooltip>
 
