@@ -9,7 +9,7 @@ import ArrowBackIcon from "@material-ui/icons/ArrowBack";
 const useStyles = makeStyles((theme) => ({
 
   backButton: {
-    position: 'absolute',
+    position: 'fixed',
     left: 20,
     bottom: 10,
     color: "#009688",
