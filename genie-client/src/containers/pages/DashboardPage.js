@@ -13,7 +13,7 @@ import {
 import Conversation from '../../components/Conversation';
 import ClientCard from '../../components/ClientCard';
 import SliderSetting from '../../components/SliderSetting';
-
+import BackButton from '../../components/BackButton';
 
 import AccountCircle from '@material-ui/icons/AccountCircle';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
@@ -91,7 +91,7 @@ const useStyles = makeStyles((theme) => ({
   },
 
   clientContainer: {
-    padding: theme.spacing(2),
+    padding: theme.spacing(1.5),
     position: 'relative',
   },
 
@@ -100,7 +100,12 @@ const useStyles = makeStyles((theme) => ({
     backgroundColor: 'white',
     boxShadow: '0 2px 3px rgba(0, 0, 0, 0.3)',
     borderRadius: '5px',
-    marginBottom: theme.spacing(4),
+    marginBottom: 0,
+    marginTop: 0,
+  },
+
+  statusIndicator: {
+    marginBottom: theme.spacing(4)
   },
 
   settingsName: {
@@ -205,6 +210,7 @@ export default function DashboardPage() {
 
   return (
     <Box className={classes.container}>
+      <BackButton url={'/'} />
       <AppBar position="fixed" className={classes.nav}>
         <Toolbar>
           <Typography variant='h4' className={classes.logo}>
@@ -279,7 +285,7 @@ export default function DashboardPage() {
         <Grid container>
           <Grid item xs={false} sm={5} md={4}>
             <Grid container className={classes.clientContainer}>
-              <Grid item xs={12} className={classes.sideCard}>
+              <Grid item xs={12} className={`${classes.sideCard} ${classes.statusIndicator}`}>
                 <Typography variant='h5' display='inline'>{currentStatus.length} </Typography>
                 <Typography variant='body2' display='inline'>Recent Conversation{currentStatus.length == 1 ? '' : 's'}</Typography>
               </Grid>
