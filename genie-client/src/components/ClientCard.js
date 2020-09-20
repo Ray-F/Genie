@@ -14,6 +14,7 @@ import ConversationIcon from "@material-ui/icons/Forum";
 
 const useStyles = makeStyles((theme) => ({
   clientCard: {
+    position: 'relative',
     padding: theme.spacing(3),
     backgroundColor: "white",
     minHeight: "450px",
@@ -44,12 +45,19 @@ const useStyles = makeStyles((theme) => ({
     color: "#2373BD",
   },
 
-  optionsRow: {
-    display: "flex",
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "flex-start",
+  bottomRow: {
+    position: 'absolute',
+    bottom: '20px',
+    width: '100%',
   },
+
+  optionsContainer: {
+    position: 'absolute',
+    bottom: '-10px',
+    right: '30px'
+  }
+
+
 }));
 
 export default function ClientCard(props) {
@@ -111,17 +119,22 @@ export default function ClientCard(props) {
           ${props.item.budgetEstimate[0]} - ${props.item.budgetEstimate[1]}
         </Typography>
 
-        <Typography
-          className={`${classes.clientCardTitles} ${classes.clientQuoteTitle}`}
-        >
-          Quoted Amount:
-        </Typography>
 
-        <Box className={classes.optionsRow}>
-          <Typography className={classes.clientQuote}>
-            ${props.item.quoted}
-          </Typography>
+
+        <Box className={classes.bottomRow}>
           <Box>
+            <Typography
+              className={`${classes.clientCardTitles} ${classes.clientQuoteTitle}`}
+            >
+              Quoted Amount:
+            </Typography>
+
+            <Typography className={classes.clientQuote}>
+              ${props.item.quoted}
+            </Typography>
+          </Box>
+
+          <Box className={classes.optionsContainer}>
             <Tooltip title="Approve">
               <IconButton onClick={handleApprove}>
                 <CheckIcon />
