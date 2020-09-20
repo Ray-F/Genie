@@ -125,6 +125,7 @@ export default function DashboardPage() {
   const [settingName, setSettingName] = useState('');
   const [settingCategory, setSettingCategory] = useState('');
 
+  const [objectId, setObjectId] = useState('');
 
 
   // Load business settings from server
@@ -133,6 +134,7 @@ export default function DashboardPage() {
     fetch('/api/settings', {method: 'GET'}).then(async (res) => {
       let resObj = await res.json();
 
+      setObjectId(resObj._id);
       setSettingSpectrum(resObj.quote_spectrum);
       setSettingPrecision(resObj.quote_precision);
       setSettingEstimate(resObj.auto_estimate);
@@ -175,6 +177,7 @@ export default function DashboardPage() {
 
   const handleSettingsSave = () => {
     let resObj = {
+      object_id: objectId,
       quote_spectrum: settingSpectrum,
       quote_precision: settingPrecision,
       auto_estimate: settingEstimate,

@@ -1,4 +1,5 @@
 const mongoClient = require('../models/mongoConnection');
+const mongo = require('mongodb');
 
 const getSettings = async (req, res, next) => {
   const settingsCol = mongoClient.db("teamregex").collection("settings");
@@ -8,10 +9,18 @@ const getSettings = async (req, res, next) => {
   res.json(settingsArray[0]);
 }
 
-const setSettings = (req, res, next) => {
-  console.log(req.body);
+const setSettings = async (req, res, next) => {
+  const settingsCol = mongoClient.db('teamregex').collection('settings');
 
-  // save stuff from body to database
+  const response = {
+    business_name: req.body.business_name,
+    business_category: req.body.business_category,
+    quote_spectrum: req.body.quote_spectrum,
+    quote_precision: req.body.quote_precision,
+    auto_estimate: req.body.auto_estimate,
+  }
+
+  await settingsCol.updateOne({_id: mongo.ObjectId(req.body.object_id)}, {$set: response});
 }
 
 module.exports = {
