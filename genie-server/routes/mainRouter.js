@@ -2,11 +2,15 @@ const {Router} = require('express');
 
 const clientController = require('../controllers/ClientController');
 const utilityController = require('../controllers/UtilityController')
+const settingsController = require('../controllers/SettingsController');
 
 const router = Router();
 
 const inputRouter = require('./inputRouter');
 
+router.get('/api/settings', settingsController.getSettings);
+
+router.post('/api/settings', settingsController.setSettings);
 
 router.get('/api/test_function', utilityController.utilityFunction)
 

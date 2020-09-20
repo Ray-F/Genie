@@ -5,11 +5,14 @@ import {
   Typography, makeStyles, AppBar, Toolbar,
   IconButton, MenuItem, Tooltip,
   Accordion, AccordionSummary, AccordionDetails,
+  Dialog, DialogTitle, DialogContent,
+  TextField, Slider, Switch, FormControlLabel, Button
 } from '@material-ui/core';
 
 
 import Conversation from '../../components/Conversation';
 import ClientCard from '../../components/ClientCard';
+import SliderSetting from '../../components/SliderSetting';
 
 
 import AccountCircle from '@material-ui/icons/AccountCircle';
@@ -35,7 +38,6 @@ const useStyles = makeStyles((theme) => ({
     position: 'fixed',
     top: '4px',
     right: '20px',
-    width: '250px'
   },
 
   logo: {
@@ -59,6 +61,16 @@ const useStyles = makeStyles((theme) => ({
     width: '50px',
     height: 'auto',
     color: '#00C2B0'
+  },
+
+  businessSettingsContainer: {
+    display: 'flex',
+    flexFlow: 'column',
+    width: '400px',
+
+    '& *': {
+      marginBottom: theme.spacing(0.5)
+    }
   },
 
   optionsBar: {
@@ -89,6 +101,10 @@ const useStyles = makeStyles((theme) => ({
     boxShadow: '0 2px 3px rgba(0, 0, 0, 0.3)',
     borderRadius: '5px',
     marginBottom: theme.spacing(4),
+  },
+
+  settingsName: {
+    width: '50%',
   }
 }));
 
@@ -100,6 +116,35 @@ export default function DashboardPage() {
   const [currentStatus, setCurrentStatus] = useState([]);
   const [refresh, setRefresh] = useState(0);
 
+  const [settingsOpen, setSettingsOpen] = useState(0);
+
+  const [settingSpectrum, setSettingSpectrum] = useState(1);
+  const [settingPrecision, setSettingPrecision] = useState(1);
+  const [settingEstimate, setSettingEstimate] = useState(true);
+  const [settingName, setSettingName] = useState('');
+  const [settingCategory, setSettingCategory] = useState('');
+
+  const [objectId, setObjectId] = useState('');
+
+
+  // Load business settings from server
+  useEffect(() => {
+
+    fetch('/api/settings', {method: 'GET'}).then(async (res) => {
+      let resObj = await res.json();
+
+      setObjectId(resObj._id);
+      setSettingSpectrum(resObj.quote_spectrum);
+      setSettingPrecision(resObj.quote_precision);
+      setSettingEstimate(resObj.auto_estimate);
+      setSettingName(resObj.business_name);
+      setSettingCategory(resObj.business_category);
+    });
+
+  }, [refresh]);
+
+
+  // Load current conversations, and repeat every 3 seconds
   useEffect(() => {
     setCurrentStatus([]);
     const fetchCurrent = async () => {
@@ -118,6 +163,7 @@ export default function DashboardPage() {
 
   }, [refresh]);
 
+  // Load current client cards, and repeat every 3 seconds
   useEffect(() => {
     setClientItems([]);
     fetch('/api/clients').then(async (res) => {
@@ -126,6 +172,36 @@ export default function DashboardPage() {
       setClientItems(resObj);
     });
   }, [refresh]);
+
+  const handleNameChange = (e) => {
+    setSettingName(e.target.value);
+  }
+
+  const handleCategoryChange = (e) => {
+    setSettingCategory(e.target.value);
+  }
+
+
+  const handleSettingsSave = () => {
+    let resObj = {
+      object_id: objectId,
+      quote_spectrum: settingSpectrum,
+      quote_precision: settingPrecision,
+      auto_estimate: settingEstimate,
+      business_name: settingName,
+      business_category: settingCategory
+    }
+
+    const reqOptions = {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(resObj)
+    }
+
+    fetch('/api/settings', reqOptions);
+
+    setSettingsOpen(0);
+  }
 
   return (
     <Box className={classes.container}>
@@ -141,7 +217,7 @@ export default function DashboardPage() {
                 You are signed in as...
               </Typography>
               <Typography variant='h6'>
-                SPPRAX MEDIA
+                {settingName.toUpperCase()}
               </Typography>
             </Box>
             <IconButton className={classes.avatarContainer}>
@@ -150,6 +226,25 @@ export default function DashboardPage() {
           </Box>
         </Toolbar>
       </AppBar>
+
+      <Dialog open={settingsOpen} onClose={handleSettingsSave}>
+        <DialogTitle>Quotation Settings</DialogTitle>
+        <DialogContent>
+          <Box className={classes.businessSettingsContainer}>
+            <SliderSetting title="Quote Spectrum" left="$" right="$$$" value={settingSpectrum} callback={(val) => setSettingSpectrum(val)} />
+
+            <SliderSetting title="Quote Precision" left="low" right="high" value={settingPrecision} callback={(val) => setSettingPrecision(val)} />
+
+            <TextField label='business name' className={classes.settingsName} value={settingName} onChange={handleNameChange} />
+
+            <TextField label='business category' className={classes.settingsName} value={settingCategory} onChange={handleCategoryChange} />
+
+            <FormControlLabel control={<Switch />} label='Autosend Estimate' checked={settingEstimate} onChange={() => setSettingEstimate(!settingEstimate)} />
+
+            <Button onClick={handleSettingsSave}>Save</Button>
+          </Box>
+        </DialogContent>
+      </Dialog>
 
       <Container maxWidth={'lg'} className={classes.gridContainer}>
 
@@ -171,13 +266,12 @@ export default function DashboardPage() {
               </Tooltip>
 
               <Tooltip title="Settings">
-                <IconButton color='inherit'>
+                <IconButton color='inherit' onClick={() => setSettingsOpen(1)}>
                   <SettingsIcon color='inherit' />
                 </IconButton>
               </Tooltip>
             </Grid>
           </Grid>
-
         </Box>
 
 
