@@ -38,7 +38,6 @@ const useStyles = makeStyles((theme) => ({
     position: 'fixed',
     top: '4px',
     right: '20px',
-    width: '250px'
   },
 
   logo: {
@@ -174,6 +173,14 @@ export default function DashboardPage() {
     });
   }, [refresh]);
 
+  const handleNameChange = (e) => {
+    setSettingName(e.target.value);
+  }
+
+  const handleCategoryChange = (e) => {
+    setSettingCategory(e.target.value);
+  }
+
 
   const handleSettingsSave = () => {
     let resObj = {
@@ -210,7 +217,7 @@ export default function DashboardPage() {
                 You are signed in as...
               </Typography>
               <Typography variant='h6'>
-                SPPRAX MEDIA
+                {settingName.toUpperCase()}
               </Typography>
             </Box>
             <IconButton className={classes.avatarContainer}>
@@ -228,9 +235,9 @@ export default function DashboardPage() {
 
             <SliderSetting title="Quote Precision" left="low" right="high" value={settingPrecision} callback={(val) => setSettingPrecision(val)} />
 
-            <TextField label='business name' className={classes.settingsName} value={settingName} onChange={(e, val) => setSettingName(val)} />
+            <TextField label='business name' className={classes.settingsName} value={settingName} onChange={handleNameChange} />
 
-            <TextField label='business category' className={classes.settingsName} value={settingCategory} onChange={(e, val) => setSettingCategory(val)} />
+            <TextField label='business category' className={classes.settingsName} value={settingCategory} onChange={handleCategoryChange} />
 
             <FormControlLabel control={<Switch />} label='Autosend Estimate' checked={settingEstimate} onChange={() => setSettingEstimate(!settingEstimate)} />
 
