@@ -1,7 +1,8 @@
 const mongoClient = require("../models/mongoConnection");
 const mongo = require("mongodb");
+const { getAllTerms } = require('../models/awsComprehendModel');
 
-const saveChatbotInput = (req, res, next) => {
+const saveChatbotInput = async (req, res, next) => {
   const clientCollection = mongoClient.db("teamregex").collection("clients");
 
   const clientInput = {
@@ -26,6 +27,18 @@ const saveChatbotInput = (req, res, next) => {
   res.json({ statusDescription: "Data uploaded to db successfully!"});
 };
 
+const saveFormAiInput = async (req, res, next) => {
+  if (req.body.text) {
+    const allTerms = await getAllTerms(req.body.text);
+    res.json(allTerms);
+
+    return 0;
+  }
+
+  res.json({ statusCode: "No text sent!"});
+}
+
 module.exports = {
-  saveChatbotInput
+  saveChatbotInput,
+  saveFormAiInput
 }
