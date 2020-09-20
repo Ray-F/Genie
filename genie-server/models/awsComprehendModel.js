@@ -8,10 +8,9 @@ const getAllTerms = async (text) => {
   let keywordsLimited = keywords.filter((word, index, self) => {
     let contains = true;
     entities.forEach((entity) => {
-      if (
-        entity.content.toLowerCase().includes(word.toLowerCase()) ||
-        word.toLowerCase().includes(entity.type.toLowerCase())
-      ) {
+      if (entity.content.toLowerCase().includes(word.toLowerCase())) {
+        contains = false;
+      } else if (word.toLowerCase().includes(entity.type.toLowerCase())) {
         contains = false;
       }
     });
@@ -50,7 +49,7 @@ const getEntities = async (text) => {
 
     let response = entityArray.filter((entity, index, self) =>
       index === self.findIndex((t) => (
-         t.content.toLowerCase().includes(entity.content.toLowerCase())
+        t.content.toLowerCase().includes(entity.content.toLowerCase())
       ))
     )
 
