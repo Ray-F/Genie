@@ -2,7 +2,8 @@ import React from 'react';
 
 //Core
 import {
-  Paper, Grid, Box, Container, Typography, makeStyles, AppBar, Toolbar, IconButton, Link
+  Paper, Grid, Box, Container, Typography, Zoom,
+  makeStyles, AppBar, Toolbar, IconButton, Link, Tooltip
 } from '@material-ui/core';
 
 //Icons
@@ -10,15 +11,19 @@ import ChatIcon from "@material-ui/icons/Chat";
 import CallIcon from "@material-ui/icons/Call";
 import BallotIcon from "@material-ui/icons/Ballot";
 
+import BackButton from '../../components/BackButton';
+
 const useStyles = makeStyles((theme) => ({
-  root: {
-    flexGrow: 1,
-    backgroundColor: "#EBEBEB",
-    position: "absolute",
-    top: 0,
-    bottom: 0,
-    left: 0,
-    right: 0,
+  container: {
+    display: 'flex',
+    flexFlow: 'column',
+    justify: 'center',
+    alignItems: 'space-around',
+    height: '100vh',
+  },
+
+  containerFill: {
+    flexGrow: 1
   },
 
   title: {
@@ -26,7 +31,7 @@ const useStyles = makeStyles((theme) => ({
     margin: 24,
     fontSize: 36,
     color: "#009688",
-    fontWeight: 420,
+    fontWeight: 500,
   },
 
   menuTitle: {
@@ -34,7 +39,6 @@ const useStyles = makeStyles((theme) => ({
     color: "#009688",
     fontWeight: 420,
     textAlign: "center",
-    marginTop: 120,
   },
 
   menuContainer: {
@@ -43,14 +47,17 @@ const useStyles = makeStyles((theme) => ({
 
   iconButton: {
     borderRadius: "1000px",
-    background: "#04BF7C",
+    backgroundColor: "#009688",
+
+    '&:hover': {
+      backgroundColor: '#15AA9C'
+    },
+
     margin: 50,
-    height: 240,
-    width: 240,
   },
 
   icon: {
-    fontSize: 72,
+    fontSize: 80,
     color: "white",
   },
 }));
@@ -59,49 +66,50 @@ export default function ClientPage() {
   const classes = useStyles();
 
   return (
-    <div className={classes.root}>
-      <AppBar position="static" color="default">
-        <Toolbar>
-          <Typography variant="h2" className={classes.title}>
-            Genie
-          </Typography>
-        </Toolbar>
-      </AppBar>
-
-      <Typography variant="h2" className={classes.menuTitle}>
-        Input method
-      </Typography>
-
+    <Box className={classes.container}>
+      <BackButton url='/' />
+      <Box className={classes.containerFill}></Box>
+      <Typography variant='h5' align='center'>Select Input Simulator</Typography>
       <div className={classes.menuContainer}>
         <a href="/client/chat">
-          <IconButton
-            className={classes.iconButton}
-            onClick={() => {}}
-            aria-label="ChatIcon"
-          >
-            <ChatIcon className={classes.icon} />
-          </IconButton>
+          <Tooltip title='Backwards Compatible Chat' TransitionComponent={Zoom}>
+            <IconButton
+              className={classes.iconButton}
+              aria-label="ChatIcon"
+            >
+              <ChatIcon className={classes.icon} />
+            </IconButton>
+          </Tooltip>
+
         </a>
         <a href="/client/form">
-          <IconButton
-            className={classes.iconButton}
-            onClick={() => {}}
-            aria-label="FormIcon"
-          >
-            <BallotIcon className={classes.icon} />
-          </IconButton>
+          <Tooltip title='New AI Chatbot' TransitionComponent={Zoom}>
+
+            <IconButton
+              className={classes.iconButton}
+              aria-label="FormIcon"
+            >
+              <BallotIcon className={classes.icon} />
+            </IconButton>
+          </Tooltip>
         </a>
 
         <a href="/client/call">
-          <IconButton
-            className={classes.iconButton}
-            onClick={() => {}}
-            aria-label="CallIcon"
-          >
-            <CallIcon className={classes.icon} />
-          </IconButton>
+          <Tooltip title='New Voice Integrations' TransitionComponent={Zoom}>
+
+            <IconButton
+              className={classes.iconButton}
+              aria-label="CallIcon"
+            >
+              <CallIcon className={classes.icon} />
+            </IconButton>
+          </Tooltip>
         </a>
       </div>
-    </div>
+
+      <Box className={classes.containerFill}>
+
+      </Box>
+    </Box>
   );
 }

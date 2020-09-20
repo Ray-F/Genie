@@ -9,6 +9,7 @@ import {
 import ArrowBackIcon from "@material-ui/icons/ArrowBack";
 
 import Image from '../../resources/images/sppraxMediaBackground.png';
+import BackButton from '../../components/BackButton';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -20,6 +21,7 @@ const useStyles = makeStyles((theme) => ({
     left: 0,
     right: 0,
     backgroundImage: `url(${Image})`,
+    backgroundSize: 'cover'
 
   },
 
@@ -60,25 +62,8 @@ export default function ClientChatPage() {
   }, []);
 
   return (
-    <div className={classes.root}>
-      <AppBar position="static" color="default">
-        <Toolbar>
-          <a href="/client">
-            <IconButton
-              edge="start"
-              className={classes.backButton}
-              color="inherit"
-              aria-label="back"
-            >
-              <ArrowBackIcon />
-            </IconButton>
-          </a>
-
-          <Typography variant="h2" className={classes.title}>
-            Genie Chat
-          </Typography>
-        </Toolbar>
-      </AppBar>
-    </div>
+    <Box className={classes.root}>
+      <BackButton url='/client' />
+    </Box>
   );
 }

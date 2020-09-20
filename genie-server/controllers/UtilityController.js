@@ -1,11 +1,9 @@
 const mongoClient = require('../models/mongoConnection');
-
+const { getAllTerms } = require('../models/awsComprehendModel');
 
 
 const utilityFunction = async (req, res, next) => {
-  const database = mongoClient.db('teamregex');
-
-  res.json({ statusCode: 200, message: "Successfully ran utility function!" });
+  res.json({ statusCode: "Successfully made utility function call!"});
 }
 
 module.exports = {
