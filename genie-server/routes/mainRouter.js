@@ -8,6 +8,8 @@ const router = Router();
 
 const inputRouter = require('./inputRouter');
 
+router.post('/api/approval', utilityController.updateStatus)
+
 router.get('/api/settings', settingsController.getSettings);
 
 router.post('/api/settings', settingsController.setSettings);

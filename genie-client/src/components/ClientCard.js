@@ -72,28 +72,45 @@ const useStyles = makeStyles((theme) => ({
 export default function ClientCard(props) {
   const classes = useStyles();
 
-  const [deleted, setDeleted] = useState(false);
-  const [approved, setApproved] = useState(false);
-
-  // wtf do i do now?!?!
-  useEffect(() => {
-    console.log("deleted");
-  }, [deleted]);
-
-  useEffect(() => {
-    console.log("approved");
-  }, [approved]);
+  const [currentStatus, setStatus] = useState(props.item.status);
 
   const handleApprove = () => {
-    // upload an invoice to our myob account
-    // send an approval email to client
-    setApproved(!approved);
-  };
+    setStatus((currentStatus) => (currentStatus = "approved"));
 
-  const handleDelete = () => {
-    // delete request from database
-    setDeleted(!deleted);
-  };
+    let resObj = {
+      object_id: props.item._id,
+      status: 'approved',
+    };
+
+    const reqOptions = {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(resObj),
+    };
+
+    console.log(reqOptions);
+
+    fetch('api/approval', reqOptions);
+  }
+
+  const handleDecline = () => {
+    setStatus((currentStatus) => (currentStatus = "declined"));
+
+    let resObj = {
+      object_id: props.item._id,
+      status: 'declined',
+    };
+
+    const reqOptions = {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(resObj),
+    };
+
+    console.log(reqOptions);
+
+    fetch("api/approval", reqOptions);
+  }
 
   return (
     <React.Fragment>
@@ -104,7 +121,7 @@ export default function ClientCard(props) {
           </Typography>
 
           <Typography className={classes.clientStatus}>
-            {props.item.status}
+            {currentStatus}
           </Typography>
         </Box>
 
@@ -155,13 +172,13 @@ export default function ClientCard(props) {
             </Tooltip>
 
             <Tooltip title="Decline">
-              <IconButton onClick={handleDelete}>
+              <IconButton onClick={handleDecline}>
                 <ClearIcon />
               </IconButton>
             </Tooltip>
 
             <Tooltip title="Archive">
-              <IconButton onClick={handleDelete}>
+              <IconButton>
                 <ArchiveIcon />
               </IconButton>
             </Tooltip>
