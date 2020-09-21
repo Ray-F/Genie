@@ -16,9 +16,9 @@ const saveChatbotInput = async (req, res, next) => {
     status: "pending",
     //extras
     email: req.body.email,
-    service_type: parseInt(req.body.customProperties.service_type[0].slice(2,-2)),
-    staff_count: parseInt(req.body.customProperties.staff_count[0].slice(2,-2)),
-    service_time: parseInt(req.body.customProperties.service_time[0].slice(2,-2)),
+    service_type: req.body.customProperties.service_type[0].slice(2,-2),
+    staff_count: req.body.customProperties.staff_count[0].slice(2,-2),
+    service_time: req.body.customProperties.service_time[0].slice(2,-2),
     create_date: req.body.createDate,
   };
 
