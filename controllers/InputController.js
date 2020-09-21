@@ -7,18 +7,18 @@ const saveChatbotInput = async (req, res, next) => {
 
   const clientInput = {
     name: req.body.firstName + " " + req.body.lastName,
-    desc: req.body.customProperties.service_description[0],
-    date: req.body.customProperties.service_date[0],
-    location: req.body.customProperties.service_location[0],
+    desc: req.body.customProperties.service_description[0].slice(2,-2),
+    date: req.body.customProperties.service_date[0].slice(3,-3),
+    location: req.body.customProperties.service_location[0].slice(2,-2),
     terms: "",
     budgetEstimate: [0, 1000],
     quoted: 420,
     status: "pending",
     //extras
     email: req.body.email,
-    service_type: req.body.customProperties.service_type[0],
-    staff_count: req.body.customProperties.staff_count[0],
-    service_time: req.body.customProperties.service_time[0],
+    service_type: parseInt(req.body.customProperties.service_type[0].slice(2,-2)),
+    staff_count: parseInt(req.body.customProperties.staff_count[0].slice(2,-2)),
+    service_time: parseInt(req.body.customProperties.service_time[0].slice(2,-2)),
     create_date: req.body.createDate,
   };
 
