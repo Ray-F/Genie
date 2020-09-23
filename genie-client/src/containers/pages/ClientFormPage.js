@@ -84,7 +84,7 @@ export default function ClientFormPage() {
 
   const generateAutoText = () => {
     setText(
-      'Hey there, my name is John Smith and I\'m looking to book a wedding videographer for 25th July, 2020. My wedding is going to be held at Markovina Estate in Kumeu, Auckland. I\'m really just looking for roughly 5 hours of coverage and ideally I\'d like to have 2 videographers present to make sure that everything is covered. My email is jsmith@gmail.com'
+      'Hey there, my name is John Smith and I\'m looking to book a wedding videographer for 25 July 2020. My wedding is going to be held at Markovina Estate in Kumeu, Auckland. I\'m really just looking for roughly 5 hours of coverage and ideally I\'d like to have 2 videographers present to make sure that everything is covered. My email is jsmith@gmail.com'
     );
   }
 
