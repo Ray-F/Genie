@@ -6,7 +6,7 @@ import {
   IconButton, MenuItem, Tooltip,
   Accordion, AccordionSummary, AccordionDetails,
   Dialog, DialogTitle, DialogContent,
-  TextField, Slider, Switch, FormControlLabel, Button
+  TextField, Slider, Switch, FormControlLabel, Button, Snackbar
 } from '@material-ui/core';
 
 
@@ -20,6 +20,7 @@ import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import SettingsIcon from '@material-ui/icons/Settings';
 import TimelineIcon from '@material-ui/icons/Timeline';
 import AutorenewIcon from '@material-ui/icons/Autorenew';
+import CloseIcon from '@material-ui/icons/Close';
 
 const useStyles = makeStyles((theme) => ({
   container: {
@@ -123,6 +124,9 @@ export default function DashboardPage() {
 
   const [settingsOpen, setSettingsOpen] = useState(0);
 
+  const [popup, setPopup] = useState(0);
+  const [popupMessage, setPopupMessage] = useState('Updated clients list.');
+
   const [settingSpectrum, setSettingSpectrum] = useState(1);
   const [settingPrecision, setSettingPrecision] = useState(1);
   const [settingEstimate, setSettingEstimate] = useState(true);
@@ -162,20 +166,26 @@ export default function DashboardPage() {
 
     fetchCurrent();
 
-    const interval = setInterval(fetchCurrent, 3000);
-
-    return () => clearInterval(interval);
-
   }, [refresh]);
 
   // Load current client cards, and repeat every 3 seconds
   useEffect(() => {
     setClientItems([]);
-    fetch('/api/clients').then(async (res) => {
-      let resObj = await res.json();
 
-      setClientItems(resObj);
-    });
+
+    const fetchClients = () => {
+      fetch('/api/clients').then(async (res) => {
+        let resObj = await res.json();
+        setClientItems(resObj);
+      });
+    };
+
+    fetchClients();
+
+    const interval = setInterval(fetchClients, 3000);
+
+    return () => clearInterval(interval);
+
   }, [refresh]);
 
   const handleNameChange = (e) => {
@@ -211,6 +221,26 @@ export default function DashboardPage() {
   return (
     <Box className={classes.container}>
       <BackButton url={'/'} />
+
+      <Snackbar
+        anchorOrigin={{
+          vertical: 'bottom',
+          horizontal: 'right',
+        }}
+        
+        open={popup}
+        autoHideDuration={6000}
+        message={popupMessage}
+        onClose={() => setPopup(0)}
+
+        action={
+          <IconButton size="small" aria-label="close" color="inherit" onClick={() => setPopup(0)}>
+            <CloseIcon fontSize="small" />
+          </IconButton>
+        }
+      >
+
+      </Snackbar>
       <AppBar position="fixed" className={classes.nav}>
         <Toolbar>
           <Typography variant='h4' className={classes.logo}>
@@ -302,7 +332,7 @@ export default function DashboardPage() {
               {clientItems.map((item, index) => {
                 return (
                   <Grid item xs={12} md={6} key={index} className={classes.clientContainer}>
-                    <ClientCard item={item} />
+                    <ClientCard item={item} updateCallback={(message) => {setRefresh(!refresh); setPopupMessage(message); setPopup(1)}} />
                   </Grid>
                 );
               })}

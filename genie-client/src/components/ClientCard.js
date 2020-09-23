@@ -67,38 +67,37 @@ const useStyles = makeStyles((theme) => ({
     bottom: "-10px",
     right: "30px",
   },
+
+  creationDate: {
+    fontSize: '0.8em',
+  },
+
+  colourGreen: {
+    color: 'green'
+  },
+
+  colourRed: {
+    color: 'red'
+  }
 }));
 
 export default function ClientCard(props) {
   const classes = useStyles();
 
   const [currentStatus, setStatus] = useState(props.item.status);
+  const [currentArchive, setCurrentArchive] = useState(props.item.archived);
 
-  const handleApprove = () => {
-    setStatus((currentStatus) => (currentStatus = "approved"));
+  const handleArchive = () => {
+    setCurrentArchive(true);
 
-    let resObj = {
-      object_id: props.item._id,
-      status: 'approved',
-    };
-
-    const reqOptions = {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(resObj),
-    };
-
-    console.log(reqOptions);
-
-    fetch('api/approval', reqOptions);
+    props.updateCallback('Archived!');
   }
 
-  const handleDecline = () => {
-    setStatus((currentStatus) => (currentStatus = "declined"));
-
+  useEffect(() => {
     let resObj = {
       object_id: props.item._id,
-      status: 'declined',
+      status: currentStatus,
+      archived: currentArchive
     };
 
     const reqOptions = {
@@ -107,9 +106,34 @@ export default function ClientCard(props) {
       body: JSON.stringify(resObj),
     };
 
-    console.log(reqOptions);
+    fetch('api/approval', reqOptions);
 
-    fetch("api/approval", reqOptions);
+  }, [currentStatus, currentArchive]);
+
+  let approvalDom;
+  let colourStatusClass;
+
+  if (currentStatus == "pending") {
+    approvalDom = (
+      <React.Fragment>
+        <Tooltip title="Approve">
+          <IconButton onClick={() => {setStatus('approved')}}>
+            <CheckIcon />
+          </IconButton>
+        </Tooltip>
+
+        <Tooltip title="Decline">
+          <IconButton onClick={() => {setStatus('declined')}}>
+            <ClearIcon />
+          </IconButton>
+        </Tooltip>
+      </React.Fragment>
+    );
+  } else if (currentStatus == "declined") {
+    console.log(currentStatus);
+    colourStatusClass = classes.colourRed;
+  } else if (currentStatus == "approved") {
+    colourStatusClass = classes.colourGreen;
   }
 
   return (
@@ -120,10 +144,14 @@ export default function ClientCard(props) {
             {props.item.name}
           </Typography>
 
-          <Typography className={classes.clientStatus}>
+          <Typography className={`${classes.clientStatus} ${colourStatusClass}`}>
             {currentStatus}
           </Typography>
         </Box>
+
+        <Typography className={classes.creationDate}>
+          {new Date(props.item.create_date).toLocaleDateString('en-GB', {year: 'numeric', month: 'long', day: 'numeric' })}
+        </Typography>
 
         <Typography className={classes.clientCardTitles}>
           Looking for...
@@ -136,7 +164,7 @@ export default function ClientCard(props) {
         </Typography>
 
         <Typography>
-          {props.item.date}, {props.item.location}
+          {new Date(props.item.date).toLocaleDateString('en-GB', {year: 'numeric', month: 'long', day: 'numeric' })}, {props.item.location}
         </Typography>
 
         <Typography className={classes.clientCardTitles}>Keywords:</Typography>
@@ -165,20 +193,11 @@ export default function ClientCard(props) {
           </Box>
 
           <Box className={classes.optionsContainer}>
-            <Tooltip title="Approve">
-              <IconButton onClick={handleApprove}>
-                <CheckIcon />
-              </IconButton>
-            </Tooltip>
 
-            <Tooltip title="Decline">
-              <IconButton onClick={handleDecline}>
-                <ClearIcon />
-              </IconButton>
-            </Tooltip>
+            {approvalDom}
 
             <Tooltip title="Archive">
-              <IconButton>
+              <IconButton onClick={handleArchive}>
                 <ArchiveIcon />
               </IconButton>
             </Tooltip>
