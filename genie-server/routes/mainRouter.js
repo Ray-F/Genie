@@ -7,14 +7,15 @@ const settingsController = require('../controllers/SettingsController');
 const router = Router();
 
 const inputRouter = require('./inputRouter');
-
 router.post('/api/approval', utilityController.updateStatus)
 
 router.get('/api/settings', settingsController.getSettings);
 
 router.post('/api/settings', settingsController.setSettings);
 
-router.get('/api/test_function', utilityController.utilityFunction)
+router.get('/api/util/add', utilityController.addMockData);
+router.get('/api/util/delete', utilityController.deleteAllData);
+router.get('/api/util/reset', utilityController.resetData);
 
 router.get("/api/clients", clientController.getClients);
 
