@@ -8,6 +8,8 @@ const quoteCalculator = require("./QuoteCalculator");
 const saveChatbotInput = async (req, res, next) => {
   const clientCollection = mongoClient.db("teamregex").collection("clients");
 
+  let quoted = 420, budgetEstimate = [0,1000];
+  
   const clientInput = {
     name: req.body.firstName + " " + req.body.lastName,
     desc: req.body.customProperties.service_description.slice(2, -2),
@@ -15,9 +17,8 @@ const saveChatbotInput = async (req, res, next) => {
     location: req.body.customProperties.service_location.slice(2, -2),
     terms: "",
 
-    //apply quoteCalculator.js functions here here
-    budgetEstimate: [0, 1000],
-    quoted: 420,
+    budgetEstimate: budgetEstimate,
+    quoted: quoted,
 
     status: "pending",
     email: req.body.email,
@@ -26,6 +27,19 @@ const saveChatbotInput = async (req, res, next) => {
     service_time: req.body.customProperties.service_time.slice(2, -2),
     create_date: req.body.createDate,
   };
+
+  // apply quotedCalculator functions
+  clientInput.quoted = quoteCalculator.calculateQuote(
+    clientInput.service_type,
+    parseInt(clientInput.staff_count),
+    parseInt(clientInput.service_time)
+  );
+
+  clientInput.budgetEstimate = quoteCalculator.calculateRange(
+    clientInput.service_type,
+    parseInt(clientInput.staff_count),
+    parseInt(clientInput.service_time)
+  );
 
   console.log(clientInput);
   
@@ -38,7 +52,8 @@ const saveChatbotInput = async (req, res, next) => {
 
 const saveFormAiInput = async (req, res, next) => {
   const clientCollection = mongoClient.db("teamregex").collection("clients");
-
+  
+  //Data filtering 
   if (req.body.text) {
     const allTerms = await getAllTerms(req.body.text);
     res.json(allTerms);
@@ -52,7 +67,9 @@ const saveFormAiInput = async (req, res, next) => {
       serviceType = "",
       staffCount = "",
       serviceTime = "",
-      createDate = "";
+      createDate = "",
+      quoted = 420,
+      budgetEstimate = [0,1000];
 
     createDate = new Date(Date.now()).toISOString();
 
@@ -86,6 +103,20 @@ const saveFormAiInput = async (req, res, next) => {
       desc += allTerms.keywords[i] + ', ';
     }
 
+    //apply quote calculation function
+    quoted = quoteCalculator.calculateQuote(
+      serviceType,
+      parseInt(staffCount),
+      parseInt(serviceTime)
+    );
+
+    budgetEstimate = quoteCalculator.calculateRange(
+      serviceType,
+      parseInt(staffCount),
+      parseInt(serviceTime)
+    );
+
+    //upload data object
     const uploadData = {
       name: name,
       desc: desc,
@@ -94,8 +125,8 @@ const saveFormAiInput = async (req, res, next) => {
       terms: terms,
 
       //todo: apply quote calculator
-      budgetEstimate: [0, 1000],
-      quoted: 420,
+      budgetEstimate: budgetEstimate,
+      quoted: quoted,
 
       status: "pending",
       email: email,
