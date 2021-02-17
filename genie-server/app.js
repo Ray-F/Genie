@@ -6,6 +6,10 @@ var logger = require('morgan');
 
 var app = express();
 
+app.listen(process.env.PORT || 9000, () => {
+  console.log("Listening");
+});
+
 // view engine setup
 app.set('view engine', 'pug')
 
@@ -13,10 +17,6 @@ app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
-
-app.listen(process.env.PORT || 9000,() => {
-  console.log('Listening');
-})
 
 // routes
 app.use('/', require('./routes/mainRouter.js'));
