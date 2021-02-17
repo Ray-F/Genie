@@ -17,6 +17,11 @@ app.use(cookieParser());
 // routes
 app.use('/', require('./routes/mainRouter.js'));
 
+// for changing hosting domain
+app.listen(process.env.port || 9000, () => {
+  console.log(`Listening on port 9000`);
+})
+
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
   next(createError(404));
